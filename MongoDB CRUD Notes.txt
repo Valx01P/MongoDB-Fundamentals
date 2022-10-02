@@ -1,0 +1,137 @@
+MONGODB NOTES//CRUD
+
+$db				//show the database your on
+
+$show dbs			//show your databases
+
+EX.
+$use blog			//"make a new database"
+
+
+EX.//To insert one document in database
+$db.posts.insertOne({
+title:'Post 1',
+body: 'Body of post.',
+category:'News',
+likes: 1,
+tags: ['news', 'events'],
+data: Date()
+})
+
+
+EX.//To insert many documents in database
+$db.posts.insertMany([
+{
+title:'Post 2',
+body: 'Body of post.',
+category:'News',
+likes: 2,
+tags: ['news', 'events'],
+data: Date()
+},
+{
+title:'Post 3',
+body: 'Body of post.',
+category:'News',
+likes: 3,
+tags: ['news', 'events'],
+data: Date()
+},
+{
+title:'Post 4',
+body: 'Body of post.',
+category:'News',
+likes: 4,
+tags: ['news', 'events'],
+data: Date()
+}
+])
+
+------------------------------------------------------
+
+//To see these posts
+$db.posts.find()	//finds all documents in collection
+
+//To narrow it down, define as an object what your
+//looking for
+EX.
+$db.posts.find({category:"News"})
+
+//Sort in ascending order(1)
+//Sort in descending order(-1)
+EX.
+$db.posts.find().sort({title:-1})
+
+
+//Counting articles in a category
+EX.
+$db.posts.find({category:"News"}).count()
+
+//Limit results returned
+EX.
+$db.posts.find().limit(2)
+
+//Return first match
+EX. using greater than (gt) operator
+//Other operators would be (gte),(lt),(lte)
+$db.posts.findOne({likes:{$gt: 3}})
+
+------------------------------------------------------
+
+//Updating/Changing a category
+EX.
+$db.posts.updateOne({title:"Post 1"}, {
+$... $set: {category: "Tech"} })
+
+//Checking that document
+EX.
+$db.posts.find({title:"Post 1"})
+
+//Inserting document
+EX.
+$db.posts.updateOne({title:"Post 6"}, {
+$... $set: {
+$..... title:'Post 6',
+$.....  body: 'Body of post.'
+$.....  category: 'News'}}, { upsert: true })
+
+//See the changes
+$db.posts.find({title:"Post 6"})
+
+//Increment int values
+EX. Adding "2 likes" to a document
+$db.posts.updateOne({title: "Post 1"}, {
+$... $inc:{
+$..... likes:2} })
+
+//See the changes
+$db.posts.find({title:"Post 1"})
+
+//Update accross document
+EX.
+$db.posts.updateMany({}, {
+$... $inc: { likes: 1 }})
+
+//See the changes
+$db.posts.find()
+
+------------------------------------------------------
+
+//seeing how many documents you have
+$db.posts.find().count()
+>6
+
+//Deleting documents (singular)
+EX.
+$db.posts.deleteOne({title:"Post 6"})
+
+//seeing how many documents you have
+$db.posts.find().count()
+>5
+
+//Delete everything in collection (Are you SURE?)
+$db.posts.deleteMany()
+
+//Delete everything within a set parameter
+EX.
+$db.posts.deleteMany({category: "Tech"})
